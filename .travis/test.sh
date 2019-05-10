@@ -102,7 +102,6 @@ make_histogram() {
 
 	try python ${PLOTS_DIR}/histogram.py ${input_name} /$dataset ${image_name}.png $do_log $bins
 	echo "$dataset histogram: `image_to_comment ${image_name}`\n\n"
-	echo $comment
 }
 
 make_xy_plot() {
