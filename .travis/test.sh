@@ -88,7 +88,7 @@ image_to_comment() {
 	image_name=$1
 	convert ${image_name}.png -trim -resize 200x ${image_name}_tb.png
 	url=`upload_to_dropbox $dropbox_dir ${image_name}.png raw`
-	tb_url=`upload_to_dropbox $dropbox_dir ${image_name}_thumbnail.png raw`
+	tb_url=`upload_to_dropbox $dropbox_dir ${image_name}_tb.png raw`
 	echo "["'!'"[]($tb_url)]($url)"
 }
 
