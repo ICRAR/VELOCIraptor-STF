@@ -157,9 +157,12 @@ run_vr() {
 
 cd ${TRAVIS_BUILD_DIR}/build
 
-# Run unit tests first
-# Need to update test so as to run VR in full on an input simulation.
 
+echo "Tests run only under certain conditions:"
+echo " - TRAVIS_PULL_REQUEST: ${TRAVIS_PULL_REQUEST}"
+echo " - MAKE_PLOTS: ${MAKE_PLOTS}"
+test -n "$EAGLE_DATA_URL"
+echo " - EAGLE_DATA_URL set? $?"
 
 # If this is a pull request, run VR against our testing data, produce a couple of standard plots
 # and post the results back to the pull request
