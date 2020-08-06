@@ -52,12 +52,12 @@ upload_to_dropbox() {
 	    -H "Authorization: Bearer $DROPBOX_TOKEN" \
 	    -H 'Content-Type: application/octet-stream' \
 	    -H "Dropbox-API-Arg: {\"path\": \"$dropbox_path\"}" \
-	    --data-binary @$2 > /dev/null
+	    --data-binary @$2 1>&2
 	try curl -X POST https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings \
 	    -H "Authorization: Bearer $DROPBOX_TOKEN" \
 	    -H "Content-Type: application/json" \
 	    --data "{\"path\": \"$dropbox_path\",\"settings\": {\"requested_visibility\": \"public\"}}" \
-	    -o output.json > /dev/null
+	    -o output.json 1>&2
 	url=`sed -n 's/.*"url": "\([^"]*\)?dl=0".*/\1/p' output.json`
 	if [ $flavour == raw ]; then
 		url+=?raw=1
@@ -163,6 +163,10 @@ echo " - TRAVIS_PULL_REQUEST: ${TRAVIS_PULL_REQUEST}"
 echo " - MAKE_PLOTS: ${MAKE_PLOTS}"
 test -n "$EAGLE_DATA_URL"
 echo " - EAGLE_DATA_URL set? $?"
+test -n "$GITHUB_TOKEN"
+echo " - GITHUB_TOKEN set? $?"
+test -n "$DROPBOX_TOKEN"
+echo " - DROPBOX_TOKEN set? $?"
 
 # If this is a pull request, run VR against our testing data, produce a couple of standard plots
 # and post the results back to the pull request
