@@ -1,7 +1,7 @@
 /*! \file ramsesitems.h
  *  \brief this file contains definitions and routines for reading RAMSES files
- *  
- * RAMSES files come in 4 separate files, 
+ *
+ * RAMSES files come in 4 separate files,
  * amr_ file containing information about the cells (number, positions) etc
  * hydro_ file containing information about the hydrodynamical properties of the cells (density, velocity, pressure/gamma, then passive scalars like metallicity)
  * part_ file containing information about number of dark matter/star particles/sink (BH?) and their position/velocity info
@@ -17,11 +17,11 @@
 #define RAMSESFLOAT double
 #endif
 #ifdef RAMSESLONGIDS
-#define RAMSESIDTYPE int
+#define RAMSESIDTYPE long
 #else
 #define RAMSESIDTYPE  unsigned int
 #endif
-#define RAMSESINTTYPE int 
+#define RAMSESINTTYPE int
 
 ///number of particle types
 #define NRAMSESTYPE 5
@@ -37,7 +37,7 @@
 ///how many particle properties are read from file in one go
 #define RAMSESCHUNKSIZE 100000
 
-#define NUMRAMSESSPHBLOCKS 1 
+#define NUMRAMSESSPHBLOCKS 1
 
 ///\name Structures for the RAMSES interface
 //@{
@@ -61,10 +61,10 @@ struct RAMSES_Header {
     int         ngridmax;
     ///max number of boundary (ghost) cells in file (per domain?)
     int         nboundary;
-    ///number of active grids 
+    ///number of active grids
     int         ngridactive;
     //@}
-    ///\name hydro info 
+    ///\name hydro info
     //@{
     ///number of hydro variables
     int         nvarh;
@@ -94,6 +94,8 @@ struct RAMSES_Header {
 int RAMSES_fortran_read(fstream &, int &);
 int RAMSES_fortran_read(fstream &, RAMSESFLOAT &);
 int RAMSES_fortran_read(fstream &, int*);
+int RAMSES_fortran_read(fstream &, long*);
+int RAMSES_fortran_read(fstream &, long long*);
 int RAMSES_fortran_read(fstream &, RAMSESFLOAT *);
 int RAMSES_fortran_read(fstream &, RAMSESIDTYPE *);
 int RAMSES_fortran_skip(fstream &, int nskips=1);
@@ -103,4 +105,4 @@ int RAMSES_fortran_skip(fstream &, int nskips=1);
 Int_t RAMSES_get_nbodies(char *fname, int ptype, Options &opt);
 //@}
 
-#endif 
+#endif

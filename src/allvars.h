@@ -423,6 +423,8 @@ struct Options
     //@{
     char *fname,*outname,*smname,*pname,*gname;
     char *ramsessnapname;
+    /// some ramses sims include 'ghost' stars with age=0, need to handle this different from dark matter particles
+    int   iramsesghoststar;
     //@}
     ///input format
     int inputtype;

@@ -1892,6 +1892,10 @@ void GetParamFile(Options &opt)
                         opt.iusetracerparticles = atoi(vbuff);
                     else if (strcmp(tbuff, "Input_includes_extradm_particle")==0)
                         opt.iuseextradarkparticles = atoi(vbuff);
+
+                    //Ramses format related
+                    else if (strcmp(tbuff, "Ramses_ghost_star_particle")==0)
+                        opt.iramsesghoststar=atoi(vbuff);
                 }
             }
         }
