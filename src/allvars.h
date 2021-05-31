@@ -2560,7 +2560,7 @@ struct PropData
 
 //for storing the units of known fields
 struct HeaderUnitInfo{
-    float massdim, lengthdim, velocitydim, timedim, tempdim, energydim;
+    float massdim, lengthdim, velocitydim, timedim, tempdim;
     string extrainfo;
     HeaderUnitInfo(float md = 0, float ld = 0, float vd = 0, float td = 0, float tempd = 0, string s = ""){
         massdim = md;
