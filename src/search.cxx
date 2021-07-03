@@ -37,7 +37,7 @@ Int_t* SearchFullSet(Options &opt, const Int_t nbodies, vector<Particle> &Part, 
     Double_t vscale2,mtotregion,vx,vy,vz;
     Double_t *vscale2array = NULL;
     Coordinate vmean(0,0,0);
-    int maxnthreads,nthreads=1,tid;
+    int nthreads=1,tid;
     Int_tree_t *Len = NULL, *Head =NULL, *Next = NULL, *Tail = NULL;
     Int_t *storetype = NULL,*storeorgIndex = NULL;
     Int_t *ids, *numingroup=NULL, *noffset = NULL;
@@ -54,11 +54,7 @@ Int_t* SearchFullSet(Options &opt, const Int_t nbodies, vector<Particle> &Part, 
     Int_t Nlocal=nbodies;
 #endif
 #ifdef USEOPENMP
-#pragma omp parallel
-    {
-    if (omp_get_thread_num()==0) maxnthreads=omp_get_num_threads();
-    if (omp_get_thread_num()==0) nthreads=omp_get_num_threads();
-    }
+    nthreads = omp_get_max_threads();
     OMP_Domain *ompdomain;
     int numompregions = ceil(nbodies/(float)opt.openmpfofsize);
     bool runompfof = (numompregions>=2 && nthreads > 1 && opt.iopenmpfof == 1);
@@ -3422,7 +3418,6 @@ Int_t* SearchBaryons(Options &opt, Int_t &nbaryons, Particle *&Pbaryons, const I
     int nsearch=opt.Nvel;
     Int_t *nnID=NULL,*numingroup;
     Double_t *dist2=NULL, *localdist;
-    int nthreads=1,maxnthreads,tid;
     int minsize;
     Int_t nparts=ndark+nbaryons;
     Int_t nhierarchy=1,gidval;
@@ -3494,13 +3489,6 @@ Int_t* SearchBaryons(Options &opt, Int_t &nbaryons, Particle *&Pbaryons, const I
             pfofdark[i]=Part[i].GetPID();
         }
     }
-#ifdef USEOPENMP
-#pragma omp parallel
-    {
-    if (omp_get_thread_num()==0) maxnthreads=omp_get_num_threads();
-    if (omp_get_thread_num()==0) nthreads=omp_get_num_threads();
-    }
-#endif
     //if serial can allocate pfofall at this point as the number of particles in local memory will not change
 #ifndef USEMPI
     if (opt.partsearchtype!=PSTALL) {
@@ -3589,7 +3577,7 @@ Int_t* SearchBaryons(Options &opt, Int_t &nbaryons, Particle *&Pbaryons, const I
     LOG(debug) << "Searching ...";
 #ifdef USEOPENMP
 #pragma omp parallel default(shared) \
-private(i,tid,p1,pindex,x1,D2,dval,rval,icheck,nnID,dist2,baryonfofold)
+private(i,p1,pindex,x1,D2,dval,rval,icheck,nnID,dist2,baryonfofold)
 {
     nnID=new Int_t[nsearch];
     dist2=new Double_t[nsearch];
@@ -3600,12 +3588,6 @@ private(i,tid,p1,pindex,x1,D2,dval,rval,icheck,nnID,dist2,baryonfofold)
 #endif
     for (i=0;i<nbaryons;i++)
     {
-#ifdef USEOPENMP
-        tid=omp_get_thread_num();
-#else
-        tid=0;
-#endif
-
         //if all particles have been searched for field objects then ignore baryons not associated with a group
         if (opt.partsearchtype==PSTALL && pfofbaryons[i]==0) continue;
         p1=Pbaryons[i];
